@@ -1,8 +1,9 @@
+import Link from "next/link";
+import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { basePath } from "@/constants/env";
 
 import "./globals.css";
-import { Metadata } from "next";
-import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +14,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const isProd = process.env.NODE_ENV === 'production';
-const basePath = isProd ? `${process.env.NEXT_PUBLIC_ASSET_PREFIX}` : '';
 
 export const metadata: Metadata = {
   title: '凡生',
