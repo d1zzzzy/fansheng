@@ -22,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  console.log(pathname);
   const basePath = pathname.startsWith('/') ? pathname : `/${pathname}`;
 
   return (
