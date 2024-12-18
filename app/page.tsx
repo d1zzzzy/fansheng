@@ -11,7 +11,14 @@ export default function Home() {
     const container = document.getElementById('canvas-container') as HTMLDivElement;
     const canvasManager = new CanvasManager(container);
 
+    canvasManager.swithTo2D();
+
     FirstScreenAnimation(canvasManager);
+
+    setTimeout(() => {
+      canvasManager.swithToWebGL();
+      canvasManager.render();
+    }, 1800);
   }, []);
 
   return (

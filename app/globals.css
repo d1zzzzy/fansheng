@@ -7,11 +7,11 @@
   /* dark mode color patterns */
   --dark-green: #012622ff;
   --sea-green: #1a936fff;
-  --mint-cream: #f1fffaff;
+  --mint-cream: #f1fffa;
   --wine: #702632ff;
 
   /* light mode color patterns */
-  --mint-cream: #f1fffaff;
+  --mint-cream: rgb(241, 255, 250);
   --indigo-dye: #08415cff;
   --persian-green: #1b998bff;
   --rose-red: #b33951ff;
