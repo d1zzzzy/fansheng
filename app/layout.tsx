@@ -1,4 +1,7 @@
+'use client';
+
 import Head from "next/head";
+import { usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
@@ -18,23 +21,26 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const basePath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+
   return (
     <html lang="en">
       <Head>
         {/* 默认 favicon */}
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={`${basePath}/favicon.ico`} />
 
         {/* 16x16 favicon */}
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href={`${basePath}/favicon-16x16.png`} />
 
         {/* 32x32 favicon */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href={`${basePath}/favicon-32x32.png`} />
 
         {/* Apple Touch Icon */}
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${basePath}/apple-touch-icon.png`} />
 
         {/* Manifest 文件（如果有） */}
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href={`${basePath}/manifest.json`} />
 
         {/* 浏览器主题颜色 */}
         <meta name="theme-color" content="#ffffff" />
