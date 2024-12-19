@@ -19,6 +19,10 @@ export default function Home() {
       canvasManager.swithToWebGL();
       canvasManager.render();
     }, 1800);
+
+    return () => {
+      canvasManager.renderer?.destroy();
+    };
   }, []);
 
   return (

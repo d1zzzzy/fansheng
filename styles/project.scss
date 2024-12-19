@@ -1,0 +1,23 @@
+.project-card {
+  position: relative;
+
+  .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 12px;
+    color: var(--background);
+  }
+
+  .description {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 12px;
+    color: var(--background);
+  }
+}
