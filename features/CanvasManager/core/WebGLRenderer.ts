@@ -1,7 +1,7 @@
-import { mat4, quat, vec3 } from 'gl-matrix';
-
+import { CameraController } from "@/features/CanvasManager/core/CameraController";
 import { positionCanvas } from "../element.util";
 import { CanvasOptions } from "../interface";
+import {mat4} from "gl-matrix";
 
 export interface IWebGLRenderer {
   initialize(container: HTMLElement, options: CanvasOptions): void;
@@ -12,39 +12,31 @@ export interface IWebGLRenderer {
 }
 
 export class WebGLRenderer implements IWebGLRenderer {
+  private cameraController: CameraController | null = null;
+
   private gl: WebGLRenderingContext | null = null;
-  private canvas: HTMLCanvasElement;
+  private readonly canvas: HTMLCanvasElement;
   private program: WebGLProgram | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
   private indexBuffer: WebGLBuffer | null = null;
   private buffers: { vertexBuffer: WebGLBuffer | null; colorBuffer: WebGLBuffer | null; lineBuffer?: WebGLBuffer | null } = { vertexBuffer: null, colorBuffer: null, lineBuffer: null };
   private vertices: Float32Array = new Float32Array([]);
   private colors: Float32Array = new Float32Array([]);
-  private cameraQuat: quat = quat.create(); // 四元数
-  private cameraTarget: vec3 = vec3.fromValues(0, 0, 0);    // 相机目标
-  private cameraDistance: number = 11.2;
-  private upDirection: vec3 = vec3.fromValues(0, 1, 0);     // 上方向
-
-  private targetCameraDistance: number = this.cameraDistance;
-
-  private modelQuat: quat = quat.create();
-  private modelRotationAngleX: number = 0;
-  private modelRotationAngleY: number = 0;
 
   constructor(container: HTMLElement) {
     this.canvas = document.createElement('canvas');
     this.canvas.setAttribute('id', 'gl-canvas');
+    this.gl = this.canvas.getContext("webgl", { antialias: true });
 
     container.appendChild(this.canvas);
 
     positionCanvas(this.canvas, container);
 
-    this.addMouseEvents();
+    this.cameraController = new CameraController(this.canvas, this.gl!);
   }
 
   initialize(container: HTMLElement): void {
-    this.gl = this.canvas.getContext("webgl", { antialias: true });
-    this.resizeCanvas(container, {});
+    this.resizeCanvas(container);
 
     if (!this.gl) {
       throw new Error("Failed to initialize WebGL context");
@@ -54,16 +46,10 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.enable(this.gl.DEPTH_TEST);  // 启用深度测试，确保物体之间的正确遮挡
     this.gl.depthFunc(this.gl.LEQUAL);  // 设置深度测试函数
-    // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_LINEAR);
-    // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
-    // this.gl.generateMipmap(this.gl.TEXTURE_2D);
-
-    // this.gl.enable(this.gl.CULL_FACE); // 启用背面剔除
-    // this.gl.cullFace(this.gl.BACK);    // 剔除背面
-    // this.gl.frontFace(this.gl.CCW);    // 设置顺时针方向为正面
 
     this.initShaders();
     this.initBuffers();
+
     console.log("WebGL Renderer with Cube initialized");
   }
 
@@ -94,24 +80,46 @@ export class WebGLRenderer implements IWebGLRenderer {
   }
 
   render() {
-    if (!this.gl || !this.program) return;
+    if (!this.gl || !this.program || !this.cameraController) return;
 
-    this.setProjectionMatrix();
-    this.setViewMatrix();
-    this.setModelMatrix();
+    // View Matrix (相机位置和方向)
+    const viewMatrix = this.cameraController.getViewMatrix();
+    const viewLocation = this.gl.getUniformLocation(this.program, 'uView');
+
+    this.gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
+
+    // Projection Matrix (透视投影)
+    const projectionMatrix = mat4.create();
+    mat4.perspective(projectionMatrix, this.cameraController.azimuth, this.canvas.width / this.canvas.height, 0.1, 100.0);
+
+    // Model Matrix (魔方自身旋转)
+    const modelMatrix = mat4.create(); // 模型矩阵默认单位矩阵
+    mat4.identity(modelMatrix);
+    mat4.rotateX(modelMatrix, modelMatrix, this.cameraController.azimuth);
+    mat4.rotateY(modelMatrix, modelMatrix, this.cameraController.elevation);
+
+    const uProjection = this.gl!.getUniformLocation(this.program!, 'uProjection');
+    const uModel = this.gl!.getUniformLocation(this.program!, 'uModel');
+
+    this.gl.uniformMatrix4fv(uProjection, false, projectionMatrix);
+    this.gl.uniformMatrix4fv(uModel, false, modelMatrix);
 
     this.gl!.clear(this.gl!.COLOR_BUFFER_BIT | this.gl!.DEPTH_BUFFER_BIT);
     this.gl!.drawArrays(this.gl!.TRIANGLES, 0, this.vertices.length / 3);
 
-    const smoothFactor = 0.1; // 调整平滑因子
-    this.cameraDistance += (this.targetCameraDistance - this.cameraDistance) * smoothFactor;
+    // 使用 requestAnimationFrame 实现循环渲染
+    requestAnimationFrame(() => this.render());
   }
 
   destroy(): void {
+    this.canvas.parentElement?.removeChild(this.canvas);
+
     if (this.gl) {
       if (this.program) this.gl.deleteProgram(this.program);
       if (this.vertexBuffer) this.gl.deleteBuffer(this.vertexBuffer);
       if (this.indexBuffer) this.gl.deleteBuffer(this.indexBuffer);
+
+      this.gl.clearColor(0.941, 1.0, 0.980, 1.0);
     }
     this.gl = null;
     this.program = null;
@@ -178,7 +186,7 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.program = program;
   }
 
-  initBuffers() {
+  private initBuffers() {
     const { vertices, colors } = generateRubikCubeData();
 
     // 顶点数据
@@ -203,117 +211,6 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.buffers = { vertexBuffer, colorBuffer };
     this.vertices = vertices;
     this.colors = colors;
-  }
-
-  // 设置透视投影矩阵
-  private setProjectionMatrix() {
-    const projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, Math.PI / 4, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100.0);
-
-    const projectionLocation = this.gl!.getUniformLocation(this.program!, 'uProjection');
-
-    if (projectionLocation) {
-      this.gl!.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
-    }
-  }
-
-  // 设置视图矩阵 (摄像机的位置和方向)
-  private setViewMatrix() {
-    const viewMatrix = mat4.create();
-
-    // 根据四元数计算方向
-    const forward = vec3.fromValues(0, 0, -1);
-    vec3.transformQuat(forward, forward, this.cameraQuat);
-
-    // 防止上下翻转过大
-    const upCheck = vec3.dot(forward, this.upDirection);
-    const tolerance = 0.01;
-    const maxAngle = Math.PI / 2 - tolerance; // 最大角度
-    const minAngle = -Math.PI / 2 + tolerance; // 最小角度
-
-    if (upCheck > 0.99 - tolerance) {
-      quat.setAxisAngle(this.cameraQuat, vec3.fromValues(1, 0, 0), maxAngle);
-    } else if (upCheck < -0.99 + tolerance) {
-      quat.setAxisAngle(this.cameraQuat, vec3.fromValues(1, 0, 0), minAngle);
-    }
-
-    // 根据旋转后的方向计算相机位置
-    const cameraPosition = vec3.create();
-    vec3.scaleAndAdd(cameraPosition, this.cameraTarget, forward, -this.cameraDistance);
-
-    // 计算视图矩阵
-    mat4.lookAt(viewMatrix, cameraPosition, this.cameraTarget, this.upDirection);
-
-    // 上传视图矩阵到 GPU
-    const viewLocation = this.gl!.getUniformLocation(this.program!, 'uView');
-    if (viewLocation) {
-      this.gl!.uniformMatrix4fv(viewLocation, false, viewMatrix);
-    }
-  }
-
-  // 设置模型矩阵 (物体的旋转和位置)
-  private setModelMatrix() {
-    const modelMatrix = mat4.create();
-
-    // 根据模型四元数计算旋转
-    mat4.fromQuat(modelMatrix, this.modelQuat);
-
-    // 上传模型矩阵
-    const modelLocation = this.gl!.getUniformLocation(this.program!, 'uModel');
-    if (modelLocation) {
-      this.gl!.uniformMatrix4fv(modelLocation, false, modelMatrix);
-    }
-  }
-
-  // updateModelRotation(axis: vec3, angle: number) {
-  //   const rotation = quat.create();
-  //   quat.setAxisAngle(rotation, axis, angle);
-  //   quat.multiply(this.modelQuat, this.modelQuat, rotation);
-  //   this.render();
-  // }
-
-  private addMouseEvents() {
-    let isDragging = false;
-    let lastX = 0;
-    let lastY = 0;
-
-    this.canvas.addEventListener('mousedown', (event) => {
-      isDragging = true;
-      lastX = event.clientX;
-      lastY = event.clientY;
-    });
-
-    this.canvas.addEventListener('mousemove', (event) => {
-      if (!isDragging) return;
-
-      const deltaX = event.clientX - lastX;
-      const deltaY = event.clientY - lastY;
-
-      lastX = event.clientX;
-      lastY = event.clientY;
-
-      // 鼠标水平和垂直移动分别影响绕 Y 和 X 轴的旋转
-      const rotationX = quat.create();
-      const rotationY = quat.create();
-
-      quat.setAxisAngle(rotationY, this.upDirection, -deltaX * 0.01); // 绕 Y 轴旋转
-      quat.setAxisAngle(rotationX, vec3.fromValues(1, 0, 0), -deltaY * 0.01); // 绕 X 轴旋转
-
-      // 更新相机的四元数
-      quat.multiply(this.cameraQuat, rotationY, this.cameraQuat);
-      quat.multiply(this.cameraQuat, this.cameraQuat, rotationX);
-
-      this.render();
-    });
-
-    this.canvas.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    this.canvas.addEventListener('wheel', (event) => {
-      this.targetCameraDistance += event.deltaY * 0.05;
-      this.targetCameraDistance = Math.max(2.0, Math.min(50.0, this.targetCameraDistance));
-    });
   }
 }
 

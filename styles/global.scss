@@ -81,12 +81,24 @@ a {
   left: 0;
 }
 
+.left-20 {
+  left: 20px;
+}
+
 .right-0 {
   right: 0;
 }
 
+.right-20 {
+  right: 20px;
+}
+
 .bottom-0 {
   bottom: 0;
+}
+
+.bottom-20 {
+  bottom: 20px;
 }
 
 .overflow-y-auto {
@@ -135,3 +147,5 @@ a {
   overflow: hidden;
   white-space: nowrap;
 }
+
+@import "button";

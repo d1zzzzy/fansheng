@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { basePath } from "@/constants/env";
 
 import "../styles/global.scss";
+import "../styles/layout.scss";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,22 +42,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="mx-auto flex items-center justify-between h-40 p-lr-24" aria-label="Global">
-          <div className="flex align-center">
-            <Link href="/">Void</Link>
+        <nav className="mx-auto flex items-center justify-between h-40 p-lr-24 header-nav" aria-label="Global">
+          <div className="nav-item">
+            <Link className="nav-item__link" href="/">Void</Link>
           </div>
-          <div className="flex items-center">
-            <Link href="/projects">Have Fun</Link>
+          <div className="nav-item">
+            <Link className="nav-item__link" href="/projects">Have Fun</Link>
           </div>
-          <div className="flex items-center">
-            <Link href="/album">Album</Link>
+          <div className="nav-item">
+            <Link className="nav-item__link" href="/albums">Albums</Link>
           </div>
-          <div className="flex items-center">
-            <Link href="/profile">Profile</Link>
+          <div className="nav-item">
+            <Link className="nav-item__link" href="/profile">Profile</Link>
           </div>
 
-          <div className="flex items-center">
-            <Link href="/schedule">Schedule</Link>
+          <div className="nav-item">
+            <Link className="nav-item__link" href="/schedule">Schedule</Link>
           </div>
         </nav>
 
