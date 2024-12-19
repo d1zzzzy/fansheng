@@ -12,12 +12,14 @@ export default class CanvasManager {
     this.container = container;
   }
 
-  swithTo2D(): void {
+  switchTo2D(): void {
     this.setRenderer(new Canvas2DRenderer(this.container));
+    this.render();
   }
 
-  swithToWebGL(): void {
+  switchToWebGL(): void {
     this.setRenderer(new WebGLRenderer(this.container));
+    this.render();
   }
 
   setRenderer(renderer: Renderer): void {
@@ -44,6 +46,12 @@ export default class CanvasManager {
   render(): void {
     if (this._renderer) {
       this._renderer.render();
+    }
+  }
+
+  destroy(): void {
+    if (this._renderer) {
+      this._renderer.destroy();
     }
   }
 }

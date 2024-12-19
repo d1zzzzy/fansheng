@@ -1,0 +1,151 @@
+:root {
+  /* dark mode color patterns */
+  --dark-green: #012622ff;
+  --sea-green: #1a936fff;
+  --mint-cream: #f1fffa;
+  --wine: #702632ff;
+
+  /* light mode color patterns */
+  --mint-cream: rgb(241, 255, 250);
+  --indigo-dye: #08415cff;
+  --persian-green: #1b998bff;
+  --rose-red: #b33951ff;
+  --cinereous: #92817A;
+
+  --background: var(--mint-cream);
+  --foreground: var(--indigo-dye);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--dark-green);
+    --foreground: var(--mint-cream);
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+a {
+  text-decoration: underline;
+  color: var(--foreground);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.mx-auto {
+  margin: auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.top-40 {
+  top: 40px;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-20 {
+  left: 20px;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.right-20 {
+  right: 20px;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.bottom-20 {
+  bottom: 20px;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.h-40 {
+  height: 40px;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+
+.p-8 {
+  padding: 8px;
+}
+
+.p-lr-24 {
+  padding: 0 24px;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.rounded-lg {
+  border-radius: 8px;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@import "button";

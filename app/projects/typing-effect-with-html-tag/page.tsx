@@ -4,7 +4,7 @@ import createTypewriter from "@/features/Interactive/TypeWriter";
 import { useEffect, useRef } from "react";
 
 const htmlContent = `
-  <div class="flex flex-col gap-4">
+  <div>
     <p>这是<strong>加粗</strong>标签</p>
     <p>这是<del>删除</del>标签</p>
     <p>这是<em>斜体</em>标签</p>

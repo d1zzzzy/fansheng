@@ -135,6 +135,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
     this.resizeObserver = null;
     this.stopAnimation();
 
+    this.clearCanvas();
+
     this.context = null;
     this.canvas = null;
     this.offscreenCanvas = null;

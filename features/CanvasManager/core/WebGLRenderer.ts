@@ -1,7 +1,7 @@
-import { mat4 } from 'gl-matrix';
-
+import { CameraController } from "@/features/CanvasManager/core/CameraController";
 import { positionCanvas } from "../element.util";
 import { CanvasOptions } from "../interface";
+import {mat4} from "gl-matrix";
 
 export interface IWebGLRenderer {
   initialize(container: HTMLElement, options: CanvasOptions): void;
@@ -12,32 +12,31 @@ export interface IWebGLRenderer {
 }
 
 export class WebGLRenderer implements IWebGLRenderer {
+  private cameraController: CameraController | null = null;
+
   private gl: WebGLRenderingContext | null = null;
-  private canvas: HTMLCanvasElement;
+  private readonly canvas: HTMLCanvasElement;
   private program: WebGLProgram | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
   private indexBuffer: WebGLBuffer | null = null;
   private buffers: { vertexBuffer: WebGLBuffer | null; colorBuffer: WebGLBuffer | null; lineBuffer?: WebGLBuffer | null } = { vertexBuffer: null, colorBuffer: null, lineBuffer: null };
   private vertices: Float32Array = new Float32Array([]);
   private colors: Float32Array = new Float32Array([]);
-  private cameraAngleX: number = 0;
-  private cameraAngleY: number = 0;
-  private cameraDistance: number = 15.4;
 
   constructor(container: HTMLElement) {
     this.canvas = document.createElement('canvas');
     this.canvas.setAttribute('id', 'gl-canvas');
+    this.gl = this.canvas.getContext("webgl", { antialias: true });
 
     container.appendChild(this.canvas);
 
     positionCanvas(this.canvas, container);
 
-    this.addMouseEvents();
+    this.cameraController = new CameraController(this.canvas, this.gl!);
   }
 
-  initialize(container: HTMLElement, options: CanvasOptions): void {
-    this.gl = this.canvas.getContext("webgl", { antialias: true });
-    this.resizeCanvas(container, {});
+  initialize(container: HTMLElement): void {
+    this.resizeCanvas(container);
 
     if (!this.gl) {
       throw new Error("Failed to initialize WebGL context");
@@ -47,11 +46,10 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.enable(this.gl.DEPTH_TEST);  // 启用深度测试，确保物体之间的正确遮挡
     this.gl.depthFunc(this.gl.LEQUAL);  // 设置深度测试函数
-    this.gl.enable(this.gl.CULL_FACE); // 启用背面剔除
-    this.gl.cullFace(this.gl.BACK);    // 剔除背面
 
     this.initShaders();
     this.initBuffers();
+
     console.log("WebGL Renderer with Cube initialized");
   }
 
@@ -64,11 +62,9 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.gl!.canvas.height = height * dpr;
 
     this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
-    console.log('Canvas size:', this.canvas.width, this.canvas.height);
-    console.log('Device pixel ratio:', window.devicePixelRatio);
   }
 
-  resizeCanvas(container: HTMLElement, options: CanvasOptions): void {
+  resizeCanvas(container: HTMLElement): void {
     if (!this.gl) return;
     const dpr = window.devicePixelRatio || 1;
 
@@ -81,27 +77,49 @@ export class WebGLRenderer implements IWebGLRenderer {
     if (this.gl) {
       this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     }
-
-    console.log('Canvas size:', this.canvas.width, this.canvas.height);
-    console.log('Device pixel ratio:', window.devicePixelRatio);
   }
 
   render() {
-    if (!this.gl || !this.program) return;
+    if (!this.gl || !this.program || !this.cameraController) return;
 
-    this.setProjectionMatrix();
-    this.setViewMatrix();
-    this.setModelMatrix();
+    // View Matrix (相机位置和方向)
+    const viewMatrix = this.cameraController.getViewMatrix();
+    const viewLocation = this.gl.getUniformLocation(this.program, 'uView');
+
+    this.gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
+
+    // Projection Matrix (透视投影)
+    const projectionMatrix = mat4.create();
+    mat4.perspective(projectionMatrix, this.cameraController.azimuth, this.canvas.width / this.canvas.height, 0.1, 100.0);
+
+    // Model Matrix (魔方自身旋转)
+    const modelMatrix = mat4.create(); // 模型矩阵默认单位矩阵
+    mat4.identity(modelMatrix);
+    mat4.rotateX(modelMatrix, modelMatrix, this.cameraController.azimuth);
+    mat4.rotateY(modelMatrix, modelMatrix, this.cameraController.elevation);
+
+    const uProjection = this.gl!.getUniformLocation(this.program!, 'uProjection');
+    const uModel = this.gl!.getUniformLocation(this.program!, 'uModel');
+
+    this.gl.uniformMatrix4fv(uProjection, false, projectionMatrix);
+    this.gl.uniformMatrix4fv(uModel, false, modelMatrix);
 
     this.gl!.clear(this.gl!.COLOR_BUFFER_BIT | this.gl!.DEPTH_BUFFER_BIT);
     this.gl!.drawArrays(this.gl!.TRIANGLES, 0, this.vertices.length / 3);
+
+    // 使用 requestAnimationFrame 实现循环渲染
+    requestAnimationFrame(() => this.render());
   }
 
   destroy(): void {
+    this.canvas.parentElement?.removeChild(this.canvas);
+
     if (this.gl) {
       if (this.program) this.gl.deleteProgram(this.program);
       if (this.vertexBuffer) this.gl.deleteBuffer(this.vertexBuffer);
       if (this.indexBuffer) this.gl.deleteBuffer(this.indexBuffer);
+
+      this.gl.clearColor(0.941, 1.0, 0.980, 1.0);
     }
     this.gl = null;
     this.program = null;
@@ -168,7 +186,7 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.program = program;
   }
 
-  initBuffers() {
+  private initBuffers() {
     const { vertices, colors } = generateRubikCubeData();
 
     // 顶点数据
@@ -194,102 +212,18 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.vertices = vertices;
     this.colors = colors;
   }
-
-  // 设置透视投影矩阵
-  private setProjectionMatrix() {
-    const projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, Math.PI / 4, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 500.0);
-
-    const projectionLocation = this.gl!.getUniformLocation(this.program!, 'uProjection');
-
-    if (projectionLocation) {
-      this.gl!.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
-    }
-  }
-
-  // 设置视图矩阵 (摄像机的位置和方向)
-  private setViewMatrix() {
-    const viewMatrix = mat4.create();
-
-    const cameraPosition = [
-      this.cameraDistance * Math.sin(this.cameraAngleY) * Math.cos(this.cameraAngleX),
-      this.cameraDistance * Math.sin(this.cameraAngleX),
-      this.cameraDistance * Math.cos(this.cameraAngleY) * Math.cos(this.cameraAngleX),
-    ];
-
-    const target = [0.0, 0.0, 0.0];
-    const up = new Float32Array([0.0, 1.0, 0.0]);
-
-    mat4.lookAt(viewMatrix, new Float32Array(cameraPosition), new Float32Array(target), up);
-
-    const viewLocation = this.gl!.getUniformLocation(this.program!, 'uView');
-    if (viewLocation) {
-      this.gl!.uniformMatrix4fv(viewLocation, false, viewMatrix);
-    }
-  }
-
-  // 设置模型矩阵 (物体的旋转和位置)
-  private setModelMatrix() {
-    const modelMatrix = mat4.create();
-
-    // 添加旋转示例
-    mat4.rotateX(modelMatrix, modelMatrix, this.cameraAngleX);
-    mat4.rotateY(modelMatrix, modelMatrix, this.cameraAngleY);
-
-    const modelLocation = this.gl!.getUniformLocation(this.program!, 'uModel');
-    if (modelLocation) {
-      this.gl!.uniformMatrix4fv(modelLocation, false, modelMatrix);
-    }
-  }
-
-  private addMouseEvents() {
-    let isDragging = false;
-    let lastX = 0;
-    let lastY = 0;
-
-    this.canvas.addEventListener('mousedown', (event) => {
-      isDragging = true;
-      lastX = event.clientX;
-      lastY = event.clientY;
-    });
-
-    this.canvas.addEventListener('mousemove', (event) => {
-      if (!isDragging) return;
-
-      const deltaX = event.clientX - lastX;
-      const deltaY = event.clientY - lastY;
-      lastX = event.clientX;
-      lastY = event.clientY;
-
-      this.cameraAngleY += deltaX * 0.01;
-      this.cameraAngleX += deltaY * 0.01;
-
-      this.render();
-    });
-
-    this.canvas.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    this.canvas.addEventListener('wheel', (event) => {
-      this.cameraDistance += event.deltaY * 0.05;
-      this.cameraDistance = Math.max(5.0, Math.min(500.0, this.cameraDistance)); // 限制缩放范围
-
-      this.render();
-    });
-  }
 }
 
 function generateRubikCubeData() {
   const size = 0.9; // 每个小立方体的边长
-  const offset = 1.1; // 每个小立方体之间的间距
+  const offset = 0.905; // 每个小立方体之间的间距
   const colors = [
-    [1, 0, 0], // 红色
-    [0, 1, 0], // 绿色
-    [0, 0, 1], // 蓝色
-    [1, 1, 0], // 黄色
-    [1, 0, 1], // 紫色
-    [0, 1, 1], // 青色
+    [0.105, 0.148, 0.308],
+    [0.152, 0.273, 0.562],
+    [0.639, 0.421, 0.656],
+    [0.351, 0.042, 0.3],
+    [0.628, 0.933, 0.542],
+    [0.824, 0.378, 0.207],
   ];
 
   const vertices: number[] = [];
