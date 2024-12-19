@@ -6,8 +6,10 @@ import "../../styles/project.scss";
 
 export default function ProjectsPage() {
   return (
-    <div>
-      <div className="gap-4 p-8 grid grid-cols-3">
+    <div className='p-24'>
+      <h2>Projects/Effects</h2>
+
+      <div className="gap-4 grid grid-cols-3">
         <section className="project-card">
           <Link className="mt-4" href="/projects/typing-effect-with-html-tag">
             <h2 className="title">标签打字机</h2>

@@ -41,7 +41,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="mx-auto flex items-center justify-between h-40" aria-label="Global">
+        <nav className="mx-auto flex items-center justify-between h-40 p-lr-24" aria-label="Global">
           <div className="flex align-center">
             <Link href="/">Void</Link>
           </div>

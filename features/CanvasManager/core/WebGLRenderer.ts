@@ -22,7 +22,7 @@ export class WebGLRenderer implements IWebGLRenderer {
   private colors: Float32Array = new Float32Array([]);
   private cameraQuat: quat = quat.create(); // 四元数
   private cameraTarget: vec3 = vec3.fromValues(0, 0, 0);    // 相机目标
-  private cameraDistance: number = 15;
+  private cameraDistance: number = 11.2;
   private upDirection: vec3 = vec3.fromValues(0, 1, 0);     // 上方向
 
   private targetCameraDistance: number = this.cameraDistance;
@@ -42,7 +42,7 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.addMouseEvents();
   }
 
-  initialize(container: HTMLElement, options: CanvasOptions): void {
+  initialize(container: HTMLElement): void {
     this.gl = this.canvas.getContext("webgl", { antialias: true });
     this.resizeCanvas(container, {});
 
@@ -78,7 +78,7 @@ export class WebGLRenderer implements IWebGLRenderer {
     this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
   }
 
-  resizeCanvas(container: HTMLElement, options: CanvasOptions): void {
+  resizeCanvas(container: HTMLElement): void {
     if (!this.gl) return;
     const dpr = window.devicePixelRatio || 1;
 
@@ -231,7 +231,6 @@ export class WebGLRenderer implements IWebGLRenderer {
     const maxAngle = Math.PI / 2 - tolerance; // 最大角度
     const minAngle = -Math.PI / 2 + tolerance; // 最小角度
 
-    console.log('upCheck', upCheck);
     if (upCheck > 0.99 - tolerance) {
       quat.setAxisAngle(this.cameraQuat, vec3.fromValues(1, 0, 0), maxAngle);
     } else if (upCheck < -0.99 + tolerance) {
@@ -320,14 +319,14 @@ export class WebGLRenderer implements IWebGLRenderer {
 
 function generateRubikCubeData() {
   const size = 0.9; // 每个小立方体的边长
-  const offset = 0.91; // 每个小立方体之间的间距
+  const offset = 0.905; // 每个小立方体之间的间距
   const colors = [
-    [1, 0, 0], // 红色
-    [0, 1, 0], // 绿色
-    [0, 0, 1], // 蓝色
-    [1, 1, 0], // 黄色
-    [1, 0, 1], // 紫色
-    [0, 1, 1], // 青色
+    [0.105, 0.148, 0.308],
+    [0.152, 0.273, 0.562],
+    [0.639, 0.421, 0.656],
+    [0.351, 0.042, 0.3],
+    [0.628, 0.933, 0.542],
+    [0.824, 0.378, 0.207],
   ];
 
   const vertices: number[] = [];
