@@ -1,10 +1,13 @@
+import Pixi from 'pixi.js';
+
 import { Canvas2DRenderer, ICanvas2DRenderer } from "./core/Canvas2DRenderer";
 import { IWebGLRenderer, WebGLRenderer } from "./core/WebGLRenderer";
+import { PixiRenderer } from './core/PixiManager';
 
-type Renderer = ICanvas2DRenderer | IWebGLRenderer;
+type Renderer = ICanvas2DRenderer | IWebGLRenderer | PixiRenderer;
 
 export default class CanvasManager {
-  private container: HTMLElement;
+  private readonly container: HTMLElement;
   private _renderer: Renderer | null = null;
 
   constructor(container: HTMLElement) {
@@ -22,7 +25,13 @@ export default class CanvasManager {
     this.render();
   }
 
-  setRenderer(renderer: Renderer): void {
+  async switchToPixi(): Promise<Renderer | Pixi.Application | null> {
+    await this.setRenderer(new PixiRenderer());
+
+    return this.renderer;
+  }
+
+  async setRenderer(renderer: Renderer): Promise<void> {
     // 如果存在旧的渲染器，先销毁
     if (this._renderer) {
       this._renderer.destroy();
@@ -30,10 +39,13 @@ export default class CanvasManager {
 
     // 切换到新的渲染器
     this._renderer = renderer;
-    this._renderer.initialize(this.container, {});
+    await this._renderer.initialize(this.container, {});
   }
 
-  get renderer(): Renderer | null {
+  get renderer(): Renderer | Pixi.Application | null {
+    if (this._renderer instanceof PixiRenderer) {
+      return this._renderer.context;
+    }
     return this._renderer;
   }
 

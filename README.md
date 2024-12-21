@@ -17,11 +17,19 @@
 ### 作品集
 
 - [ ] FanS
+  - [x] 2D动画(原生Canvas)
+    - [ ] 使用 `pixi.js` 优化
+  - [x] 3D效果(webgl)
+- [ ] 项目/功能
+  - [x] HTML标签打字机
+- [ ] 其他
 
 ### 路由
 
-- '/home': 首页 (/)
-  - 初始动画
-- '/profile': 简历
-- '/album': 相册
-- '/article': 文章
+- `/home`: 首页 (/)
+  - ✅ 初始动画
+- `/profile`: 简历
+- `/projects`: 小功能
+- `/album`: 相册
+- `/article`: 文章
+

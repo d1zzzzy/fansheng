@@ -1,3 +1,5 @@
+@import "button";
+
 :root {
   /* dark mode color patterns */
   --dark-green: #012622ff;
@@ -6,7 +8,6 @@
   --wine: #702632ff;
 
   /* light mode color patterns */
-  --mint-cream: rgb(241, 255, 250);
   --indigo-dye: #08415cff;
   --persian-green: #1b998bff;
   --rose-red: #b33951ff;
@@ -41,6 +42,13 @@ a {
   color: var(--foreground);
 }
 
+button {
+  padding: 0;
+  outline: none;
+  border: none;
+  background: none;
+}
+
 .w-full {
   width: 100%;
 }
@@ -57,6 +65,10 @@ a {
   display: flex;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .items-center {
   align-items: center;
 }
@@ -71,6 +83,18 @@ a {
 
 .fixed {
   position: fixed;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top-0 {
+  top: 0;
 }
 
 .top-40 {
@@ -93,12 +117,24 @@ a {
   right: 20px;
 }
 
+.right-40 {
+  right: 40px;
+}
+
 .bottom-0 {
   bottom: 0;
 }
 
 .bottom-20 {
   bottom: 20px;
+}
+
+.bottom-40 {
+  bottom: 40px;
+}
+
+.z-5 {
+  z-index: 5;
 }
 
 .overflow-y-auto {
@@ -116,6 +152,10 @@ a {
 
 .gap-4 {
   gap: 4px;
+}
+
+.gap-8 {
+  gap: 8px;
 }
 
 .p-8 {
@@ -148,4 +188,10 @@ a {
   white-space: nowrap;
 }
 
-@import "button";
+.pointer {
+  cursor: pointer;
+}
+
+.text-16 {
+  font-size: 16px;
+}

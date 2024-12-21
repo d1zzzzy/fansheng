@@ -1,68 +1,53 @@
 'use client';
 
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import Pixi from "pixi.js";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import CanvasManager from '@/features/CanvasManager';
-import FirstScreenAnimation from './animation';
-
-enum Dimension {
-  TWO = '2d',
-  THREE = 'webgl',
-}
+import {drawPalettes} from "@/app/drawPalettes";
+import {PixiRenderer} from "@/features/CanvasManager/core/PixiManager";
 
 export default function Home() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [dimension, setDimension] = useState(Dimension.TWO);
   const [canvasManager, setCanvasManager] = useState<CanvasManager | null>(null);
 
-  const switchTo2D = useCallback(() => {
-    setDimension(Dimension.TWO);
-
+  const refreshCanvas = useCallback((randomSeed = false) => {
     if (canvasManager) {
-      canvasManager.switchTo2D();
-      FirstScreenAnimation(canvasManager);
+      drawPalettes(canvasManager.renderer as Pixi.Application, randomSeed);
     }
   }, [canvasManager]);
-
-  const switchToWebGL = useCallback(() => {
-    setDimension(Dimension.THREE);
-
-    if (canvasManager) {
-      canvasManager.switchToWebGL();
-    }
-  }, [canvasManager]);
-
-  const btnText = useMemo(() => {
-    return dimension === Dimension.TWO ? '3D' : '2D';
-  }, [dimension]);
-
-  const switchDimension = useCallback(() => {
-    if (canvasManager) {
-      canvasManager.destroy();
-    }
-
-    if (dimension === Dimension.TWO) {
-      switchToWebGL();
-    } else {
-      switchTo2D();
-    }
-  }, [canvasManager, dimension, switchTo2D, switchToWebGL]);
 
   useEffect(() => {
     if (ref.current) {
       const instance = new CanvasManager(ref.current);
 
-      instance.switchTo2D();
-      setCanvasManager(instance);
-      FirstScreenAnimation(instance);
+      instance.switchToPixi().then(() => {
+        setCanvasManager(instance);
+      });
     }
   }, []);
 
+  useEffect(() => {
+    if (canvasManager) {
+      console.log('canvasManager', canvasManager, canvasManager.renderer instanceof PixiRenderer)
+      if (canvasManager.renderer) {
+        drawPalettes(canvasManager.renderer as Pixi.Application);
+      }
+    }
+  }, [canvasManager]);
+
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div ref={ref} className="canvas-container w-full h-full" id="canvas-container"></div>
 
-      <button className="btn btn--primary fixed right-20 bottom-20" onClick={switchDimension}>{ btnText }</button>
+      <button
+        className='absolute flex flex-col gap-8 right-40 bottom-40 pointer'
+      >
+        <RefreshRoundedIcon onClick={() => refreshCanvas()}/>
+        <AutorenewRoundedIcon onClick={() => refreshCanvas(true)} />
+      </button>
     </div>
   );
 }
