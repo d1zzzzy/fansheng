@@ -42,6 +42,13 @@ a {
   color: var(--foreground);
 }
 
+button {
+  padding: 0;
+  outline: none;
+  border: none;
+  background: none;
+}
+
 .w-full {
   width: 100%;
 }
@@ -56,6 +63,10 @@ a {
 
 .flex {
   display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .items-center {
@@ -76,6 +87,10 @@ a {
 
 .relative {
   position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
 
 .top-0 {
@@ -102,12 +117,20 @@ a {
   right: 20px;
 }
 
+.right-40 {
+  right: 40px;
+}
+
 .bottom-0 {
   bottom: 0;
 }
 
 .bottom-20 {
   bottom: 20px;
+}
+
+.bottom-40 {
+  bottom: 40px;
 }
 
 .z-5 {
@@ -129,6 +152,10 @@ a {
 
 .gap-4 {
   gap: 4px;
+}
+
+.gap-8 {
+  gap: 8px;
 }
 
 .p-8 {
@@ -159,4 +186,12 @@ a {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-16 {
+  font-size: 16px;
 }

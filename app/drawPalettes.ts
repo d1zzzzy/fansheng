@@ -5,11 +5,16 @@ import palettes from 'nice-color-palettes';
 
 const margin = 100;
 
-export function drawPalettes(app: Application) {
+export function drawPalettes(app: Application, randomSeed = false) {
   const { width, height } = app.screen;
-  const points = createGrid(24);
-
+  const points = createGrid(16);
   const texts: Text[] = [];
+
+  if (randomSeed) {
+    app.stage.removeChildren();
+    random.setSeed(Math.random());
+    console.log('random.seed: ', random.seed)
+  }
 
   points.forEach((point) => {
     const { position, radius, color, rotation } = point;
@@ -19,14 +24,17 @@ export function drawPalettes(app: Application) {
     const y = lerp(margin, height - margin, v);
 
     const style = new TextStyle({
-      fontFamily: 'Arial',
+      fontFamily: 'Helvetica',
       fontSize: radius * width,
       fill: color,
       align: 'center',
+      stroke: { width: 0 },
     });
     const text = new Text({ text: '→' , style });
     text.x = x;
     text.y = y;
+    // 旋转点设置为中心点
+    text.anchor.set(0.5, 0.5);
     text.rotation = rotation;
 
     texts.push(text);

@@ -1,15 +1,23 @@
 'use client';
 
-import { useEffect, useRef, useState} from 'react';
+import Pixi from "pixi.js";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import CanvasManager from '@/features/CanvasManager';
 import {drawPalettes} from "@/app/drawPalettes";
 import {PixiRenderer} from "@/features/CanvasManager/core/PixiManager";
-import Pixi from "pixi.js";
 
 export default function Home() {
   const ref = useRef<HTMLDivElement | null>(null);
   const [canvasManager, setCanvasManager] = useState<CanvasManager | null>(null);
+
+  const refreshCanvas = useCallback((randomSeed = false) => {
+    if (canvasManager) {
+      drawPalettes(canvasManager.renderer as Pixi.Application, randomSeed);
+    }
+  }, [canvasManager]);
 
   useEffect(() => {
     if (ref.current) {
@@ -31,8 +39,15 @@ export default function Home() {
   }, [canvasManager]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div ref={ref} className="canvas-container w-full h-full" id="canvas-container"></div>
+
+      <button
+        className='absolute flex flex-col gap-8 right-40 bottom-40 pointer'
+      >
+        <RefreshRoundedIcon onClick={() => refreshCanvas()}/>
+        <AutorenewRoundedIcon onClick={() => refreshCanvas(true)} />
+      </button>
     </div>
   );
 }
