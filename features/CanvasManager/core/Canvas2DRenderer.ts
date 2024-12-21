@@ -1,15 +1,10 @@
-import { DrawUtil } from "../draw.util";
-import { positionCanvas } from "../element.util";
+import { Renderer } from "@/features/CanvasManager/core/typing";
 import { CanvasOptions, DrawOptions, Line, Point, RotateLine } from "../interface";
+import { positionCanvas } from "../element.util";
 import { rotatePoint } from "../point.util";
+import { DrawUtil } from "../draw.util";
 
-export interface ICanvas2DRenderer {
-  initialize(container: HTMLElement, options: CanvasOptions): void;
-  resizeCanvas(container: HTMLElement, options: CanvasOptions): void;
-  resize(width: number, height: number): void;
-  render(): void;
-  destroy(): void;
-
+export interface ICanvas2DRenderer extends Renderer {
   // 动画效果
   moveLine(start: Point, end: Point, options: DrawOptions, duration: number, gap: number): Promise<void>;
   moveLines(lines: Line[], options: DrawOptions, duration: number, gaps: number[]): Promise<void>;

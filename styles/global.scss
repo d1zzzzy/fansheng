@@ -1,3 +1,5 @@
+@import "button";
+
 :root {
   /* dark mode color patterns */
   --dark-green: #012622ff;
@@ -6,7 +8,6 @@
   --wine: #702632ff;
 
   /* light mode color patterns */
-  --mint-cream: rgb(241, 255, 250);
   --indigo-dye: #08415cff;
   --persian-green: #1b998bff;
   --rose-red: #b33951ff;
@@ -73,6 +74,14 @@ a {
   position: fixed;
 }
 
+.relative {
+  position: relative;
+}
+
+.top-0 {
+  top: 0;
+}
+
 .top-40 {
   top: 40px;
 }
@@ -99,6 +108,10 @@ a {
 
 .bottom-20 {
   bottom: 20px;
+}
+
+.z-5 {
+  z-index: 5;
 }
 
 .overflow-y-auto {
@@ -147,5 +160,3 @@ a {
   overflow: hidden;
   white-space: nowrap;
 }
-
-@import "button";

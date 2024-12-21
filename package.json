@@ -11,8 +11,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "canvas-sketch-util": "^1.10.0",
     "gl-matrix": "^3.4.3",
     "next": "15.1.0",
+    "nice-color-palettes": "^4.0.0",
+    "pixi.js": "^8.6.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
