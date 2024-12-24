@@ -15,6 +15,8 @@
 
   --background: var(--mint-cream);
   --foreground: var(--indigo-dye);
+
+  --header-height: 40px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,6 +44,16 @@ a {
   color: var(--foreground);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
 button {
   padding: 0;
   outline: none;
@@ -53,16 +65,36 @@ button {
   width: 100%;
 }
 
+.w-80per {
+  width: 80%;
+}
+
 .h-full {
   height: 100%;
 }
 
+.h-80per {
+  height: 80%;
+}
+
 .mx-auto {
-  margin: auto;
+  margin: 0 auto;
+}
+
+.mr-8 {
+  margin-right: 8px;
 }
 
 .flex {
   display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.block {
+  display: block;
 }
 
 .flex-col {
@@ -158,6 +190,10 @@ button {
   gap: 8px;
 }
 
+.gap-16 {
+  gap: 16px;
+}
+
 .p-8 {
   padding: 8px;
 }
@@ -194,4 +230,16 @@ button {
 
 .text-16 {
   font-size: 16px;
+}
+
+.shadow-sm {
+  box-shadow: 0 4px 8px 4px rgba(1, 38, 124, .1);
+}
+
+.bg-background {
+  background: var(--background);
+}
+
+.text-foreground {
+  color: var(--foreground) !important;
 }

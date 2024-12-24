@@ -86,7 +86,7 @@ export default function TypingEffectWithHtmlTag() {
   }, []);
 
   return (
-    <div>
+    <div className="page p-24">
       <div>
         <h1 className="text-4xl font-bold text-center">标签打字机</h1>
 

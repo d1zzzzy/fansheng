@@ -13,4 +13,22 @@ module.exports = {
   sassOptions: {
     includePaths: [resolve(__dirname, 'styles')],
   },
+  experimental: {
+    turbo: {
+      rules: {
+        '*.vert': {
+          loaders: ['raw-loader'],
+          as: '*.js'
+        },
+        '*.frag': {
+          loaders: ['raw-loader'],
+          as: '*.js'
+        },
+        '*.wgsl': {
+          loaders: ['raw-loader'],
+          as: '*.js'
+        }
+      }
+    }
+  }
 };
