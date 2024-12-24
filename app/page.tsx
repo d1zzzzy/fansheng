@@ -6,8 +6,7 @@ import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import CanvasManager from '@/features/CanvasManager';
-import {drawPalettes} from "@/app/drawPalettes";
-import {PixiRenderer} from "@/features/CanvasManager/core/PixiManager";
+import { drawPalettes } from "@/app/drawPalettes";
 
 export default function Home() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -31,7 +30,6 @@ export default function Home() {
 
   useEffect(() => {
     if (canvasManager) {
-      console.log('canvasManager', canvasManager, canvasManager.renderer instanceof PixiRenderer)
       if (canvasManager.renderer) {
         drawPalettes(canvasManager.renderer as Pixi.Application);
       }

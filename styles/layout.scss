@@ -6,3 +6,8 @@
     //color: var(--mint-cream);
   }
 }
+
+.page {
+  height: calc(100vh - var(--header-height));
+  margin-top: var(--header-height);
+}

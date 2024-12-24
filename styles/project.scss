@@ -1,13 +1,16 @@
 .project-card {
   position: relative;
+  font-size: 0;
+  overflow: hidden;
 
   .title {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
     padding: 0 12px;
+    font-size: 16px;
+    line-height: 48px;
     color: var(--background);
   }
 
@@ -16,8 +19,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    bottom: 0;
     padding: 0 12px;
+    font-size: 12px;
     color: var(--background);
   }
 }
