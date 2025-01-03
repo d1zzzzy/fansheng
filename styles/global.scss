@@ -11,7 +11,7 @@
   --indigo-dye: #08415cff;
   --persian-green: #1b998bff;
   --rose-red: #b33951ff;
-  --cinereous: #92817A;
+  --cinereous: #92817a;
 
   --background: var(--mint-cream);
   --foreground: var(--indigo-dye);
@@ -29,7 +29,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 html,
@@ -83,6 +83,10 @@ button {
 
 .mr-8 {
   margin-right: 8px;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
 }
 
 .flex {
@@ -182,6 +186,10 @@ button {
   height: 40px;
 }
 
+.lh-2 {
+  line-height: 2;
+}
+
 .gap-4 {
   gap: 4px;
 }
@@ -204,6 +212,14 @@ button {
 
 .p-24 {
   padding: 24px;
+}
+
+.p-lr-24 {
+  padding: 0 24px;
+}
+
+.p-b-24 {
+  padding-bottom: 24px;
 }
 
 .grid {
@@ -233,7 +249,7 @@ button {
 }
 
 .shadow-sm {
-  box-shadow: 0 4px 8px 4px rgba(1, 38, 124, .1);
+  box-shadow: 0 4px 8px 4px rgba(1, 38, 124, 0.1);
 }
 
 .bg-background {
@@ -242,4 +258,17 @@ button {
 
 .text-foreground {
   color: var(--foreground) !important;
+}
+
+.border-box {
+  box-sizing: border-box;
+}
+
+.radius-8 {
+  border-radius: 8px;
+}
+
+/* Flex */
+.flex-1 {
+  flex: 1;
 }
