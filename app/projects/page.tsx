@@ -6,8 +6,8 @@ import "../../styles/project.scss";
 
 export default function ProjectsPage() {
   return (
-    <div className='p-24'>
-      <h2>Projects/Effects</h2>
+    <div className='p-lr-24'>
+      <h2 className="lh-2">Projects/Effects</h2>
 
       <div className="gap-16 grid grid-cols-3">
         <section className="project-card shadow-sm rounded-lg">
@@ -22,7 +22,7 @@ export default function ProjectsPage() {
           <Link className="mt-4 block" href="/projects/webgl-circle-animation">
             <h2 className="title text-foreground">Shader Noise Animation</h2>
             <img className="w-full h-full" src={`${basePath}/assets/shader-noise.png`} alt="文字打字机" />
-            <p className="description text-foreground">-</p>
+            <p className="description text-foreground">一个噪点shader 2D 动画</p>
           </Link>
         </section>
       </div>
