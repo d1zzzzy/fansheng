@@ -232,6 +232,10 @@ button {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .rounded-lg {
   border-radius: 8px;
 }
