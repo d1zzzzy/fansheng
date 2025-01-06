@@ -14,9 +14,7 @@ export default function WebGLCircleAnimation() {
     async function init() {
       if (canvasEl.current) {
         const _app = new Application();
-
-        const width = 1024;
-        const height = 800;
+        const { width, height } = canvasEl.current.getBoundingClientRect();
 
         await _app.init({
           canvas: canvasEl.current,
@@ -68,6 +66,8 @@ export default function WebGLCircleAnimation() {
         triangle.x = 0;
         triangle.y = 0;
 
+        console.log(width, height);
+
         _app.stage.addChild(triangle);
 
         const animate = () => {
@@ -92,11 +92,11 @@ export default function WebGLCircleAnimation() {
   }, [app]);
 
   return (
-    <main className="page flex flex-col justify-center items-center p-24">
+    <main className="page p-24 border-box">
       <h1 className="text-4xl font-bold text-center">Shader Noise Animation</h1>
 
-      <div className="flex justify-center w-full mx-auto">
-        <canvas ref={canvasEl} id="webgl" className="w-80per h-80per shadow-sm"></canvas>
+      <div className="content mx-auto">
+        <canvas ref={canvasEl} id="webgl" className="shadow-sm w-full h-full"></canvas>
       </div>
     </main>
   );

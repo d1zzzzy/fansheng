@@ -151,8 +151,9 @@ void main() {
   float size = canvasWidth / aspect;
 
   vec2 position = vec2(vPosition.x / size, vPosition.y / size);
+//  vec2 center = position - vec2(0.5 * aspect, 0.5);
+//  center.x *= aspect;
   vec2 center = position - vec2(0.5 * aspect, 0.5);
-  center.x *= aspect;
 
   float dist = length(center);
 
