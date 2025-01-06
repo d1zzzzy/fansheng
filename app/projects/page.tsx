@@ -27,7 +27,7 @@ export default function ProjectsPage() {
         </section>
 
         <section className="project-card shadow-sm rounded-lg">
-          <Link className="mt-4 block" href="/projects/webgl-circle-animation">
+          <Link className="mt-4 block" href="/projects/three-attributes">
             <h2 className="title text-foreground">ThreeJS Attributes</h2>
             <img className="w-full h-full" src={`${basePath}/assets/three-attributes.png`} alt="three-attributes"/>
             <p className="description text-foreground">ThreeJS Attributes</p>
