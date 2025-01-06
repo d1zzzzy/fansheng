@@ -27,6 +27,10 @@ module.exports = {
         '*.wgsl': {
           loaders: ['raw-loader'],
           as: '*.js'
+        },
+        '*.glsl': {
+          loaders: ['raw-loader'],
+          as: '*.js'
         }
       }
     }
