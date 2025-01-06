@@ -34,5 +34,13 @@ module.exports = {
         }
       }
     }
-  }
+  },
+  // @ts-expect-error non-optional
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(glsl|vert|frag)$/,
+      use: ['raw-loader'],
+    });
+    return config;
+  },
 };
