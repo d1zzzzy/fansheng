@@ -87,6 +87,10 @@ button {
   margin-right: 8px;
 }
 
+.mt-24 {
+  margin-top: 24px;
+}
+
 .mb-24 {
   margin-bottom: 24px;
 }
@@ -212,6 +216,14 @@ button {
   padding: 0 24px;
 }
 
+.p-t-12 {
+  padding-top: 12px;
+}
+
+.p-12 {
+  padding: 12px;
+}
+
 .p-24 {
   padding: 24px;
 }
@@ -254,6 +266,10 @@ button {
   font-size: 16px;
 }
 
+.text-36 {
+  font-size: 36px;
+}
+
 .shadow-sm {
   box-shadow: 0 4px 8px 4px rgba(1, 38, 124, 0.1);
 }
@@ -277,4 +293,13 @@ button {
 /* Flex */
 .flex-1 {
   flex: 1;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+}
+
+.grid-col-2 {
+  grid-template-columns: 50% 50%;
 }

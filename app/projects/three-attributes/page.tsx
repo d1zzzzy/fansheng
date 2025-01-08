@@ -1,8 +1,8 @@
 "use client";
 
-import { useLayoutEffect, useEffect, useRef } from "react";
+import {useLayoutEffect, useRef} from "react";
 
-import { draw } from "./draw";
+import {draw} from "./draw";
 
 export default function ThreeAttributes() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -12,8 +12,6 @@ export default function ThreeAttributes() {
       draw(canvasRef.current);
     }
   }, []);
-
-  useEffect(() => {}, []);
 
   return (
     <main className="page p-24 border-box">
