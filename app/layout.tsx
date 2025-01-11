@@ -57,8 +57,8 @@ export default function RootLayout({
             </Link>
           </div>
           <div className="nav-item">
-            <Link className="nav-item__link" href="/albums">
-              Albums
+            <Link className="nav-item__link" target="_blank" href="https://fansheng.today/articles">
+              Articles
             </Link>
           </div>
           <div className="nav-item">
