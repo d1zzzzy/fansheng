@@ -1,0 +1,38 @@
+.article {
+  &-list {
+
+  }
+
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+
+    &-title {
+
+    }
+
+    &-date {
+      font-style: italic;
+    }
+  }
+
+  &-detail {
+    &__title {
+      padding: 10px 0;
+    }
+
+    &__date {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--foreground);
+    }
+
+    &__content {
+      .markdown-body {
+        background-color: transparent;
+      }
+    }
+  }
+}

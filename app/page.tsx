@@ -1,51 +1,45 @@
-'use client';
+import Link from "next/link";
 
-import Pixi from "pixi.js";
-import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { basePath } from "@/constants/env";
 
-import CanvasManager from '@/features/CanvasManager';
-import { drawPalettes } from "@/app/drawPalettes";
+import "../styles/project.scss";
 
-export default function Home() {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [canvasManager, setCanvasManager] = useState<CanvasManager | null>(null);
-
-  const refreshCanvas = useCallback((randomSeed = false) => {
-    if (canvasManager) {
-      drawPalettes(canvasManager.renderer as Pixi.Application, randomSeed);
-    }
-  }, [canvasManager]);
-
-  useEffect(() => {
-    if (ref.current) {
-      const instance = new CanvasManager(ref.current);
-
-      instance.switchToPixi().then(() => {
-        setCanvasManager(instance);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (canvasManager) {
-      if (canvasManager.renderer) {
-        drawPalettes(canvasManager.renderer as Pixi.Application);
-      }
-    }
-  }, [canvasManager]);
-
+export default function ProjectsPage() {
   return (
-    <div className="w-full h-full relative">
-      <div ref={ref} className="canvas-container w-full h-full" id="canvas-container"></div>
+    <div className='p-24'>
+      <div className="gap-16 grid grid-cols-4">
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/typing-effect-with-html-tag">
+            <h2 className="title text-foreground">标签打字机</h2>
+            <img className="project-image" src={`${basePath}/assets/typewriter-7686636_1280.jpg`} alt="标签打字机"/>
+            <p className="description text-foreground">一个可以打印HTML标签的打字效果</p>
+          </Link>
+        </section>
 
-      <button
-        className='absolute flex flex-col gap-8 right-40 bottom-40 pointer'
-      >
-        <RefreshRoundedIcon onClick={() => refreshCanvas()}/>
-        <AutorenewRoundedIcon onClick={() => refreshCanvas(true)} />
-      </button>
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/webgl-circle-animation">
+            <h2 className="title text-foreground">Shader Noise Animation</h2>
+            <img className="project-image" src={`${basePath}/assets/shader-noise.png`} alt="noise animation"/>
+            <p className="description text-foreground">一个噪点shader 2D 动画</p>
+          </Link>
+        </section>
+
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/three-attributes">
+            <h2 className="title text-foreground">ThreeJS Attributes</h2>
+            <img className="project-image" src={`${basePath}/assets/three-attributes.png`} alt="three-attributes"/>
+            <p className="description text-foreground">ThreeJS Attributes</p>
+          </Link>
+        </section>
+
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/gaussian-noise-2d">
+            <h2 className="title text-foreground">Gaussian Noise 2D Pattern</h2>
+            <img className="project-image" src={`${basePath}/assets/gaussian-noise-2d.jpg`} alt="three-attributes"/>
+            <p className="description text-foreground">高斯噪点函数生成的图案</p>
+          </Link>
+        </section>
+      </div>
     </div>
   );
 }
