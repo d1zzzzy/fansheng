@@ -13,6 +13,15 @@ module.exports = {
   sassOptions: {
     includePaths: [resolve(__dirname, 'styles')],
   },
+  // @ts-expect-error unknown property
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(vert|frag|wgsl|glsl)/,
+      use: ['raw-loader'],
+    });
+
+    return config;
+  },
   experimental: {
     turbo: {
       rules: {
