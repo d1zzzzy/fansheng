@@ -8,7 +8,7 @@ const htmlContent = `
     <p>这是<strong>加粗</strong>标签</p>
     <p>这是<del>删除</del>标签</p>
     <p>这是<em>斜体</em>标签</p>
-    <p>这是<a href="/">链接</a>标签</p>
+    <p>这是<a href="/public">链接</a>标签</p>
     <p>这是<span style="color: red;">颜色</span>标签</p>
 
     <div>

@@ -42,39 +42,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
-        <nav
-          className="absolute top-0 w-full border-box mx-auto flex items-center justify-between h-40 p-lr-24 header-nav z-5"
-          aria-label="Global"
-        >
-          <div className="nav-item">
-            <Link className="nav-item__link" href="/">
-              Void
-            </Link>
-          </div>
-          <div className="nav-item">
-            <Link className="nav-item__link" href="/projects">
-              Have Fun
-            </Link>
-          </div>
-          <div className="nav-item">
-            <Link className="nav-item__link" target="_blank" href="https://fansheng.today/articles">
-              Articles
-            </Link>
-          </div>
-          <div className="nav-item">
-            <Link className="nav-item__link" href="/profile">
-              Profile
-            </Link>
-          </div>
-
-          <div className="nav-item">
-            <Link className="nav-item__link" href="/schedule">
-              Schedule
-            </Link>
-          </div>
-        </nav>
-
-        <div className="fixed top-40 left-0 right-0 bottom-0">{children}</div>
+        <div className="fixed top-0 left-0 right-0 bottom-0">{children}</div>
       </body>
     </html>
   );
