@@ -1,0 +1,19 @@
+1:"$Sreact.fragment"
+2:I[2606,[],""]
+3:I[9973,[],""]
+4:I[744,[],"ClientPageRoot"]
+5:I[4073,["599","static/chunks/b001e2aa-0e1bf81651f62154.js","809","static/chunks/809-716f78663760a444.js","639","static/chunks/639-1164f456a3cef037.js","867","static/chunks/app/event-loop-in-browser/page-49fa1bc60fc98d44.js"],"default"]
+8:I[9934,[],"OutletBoundary"]
+a:I[9934,[],"MetadataBoundary"]
+c:I[9934,[],"ViewportBoundary"]
+e:I[112,[],""]
+:HL["/fansheng/_next/static/media/569ce4b8f30dc480-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/fansheng/_next/static/media/93f479601ee12b01-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/fansheng/_next/static/css/3738d120bb4d639a.css","style"]
+:HL["/fansheng/_next/static/css/816c72a330f138b3.css","style"]
+0:{"P":null,"b":"6CCTZ0IBaCjAfpU_wbmCs","p":"/fansheng","c":["","event-loop-in-browser"],"i":false,"f":[[["",{"children":["event-loop-in-browser",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/fansheng/_next/static/css/3738d120bb4d639a.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__variable_52740f __variable_c20dba antialiased relative","children":["$","div",null,{"className":"fixed top-0 left-0 right-0 bottom-0","children":["$","$L2",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],["$","section",null,{"className":"h-screen p-24","children":[["$","h1",null,{"className":"text-4xl font-bold","children":"Building now..."}],["$","p",null,{"className":"text-2xl","children":"It will be ready soon."}]]}]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]}]]}],{"children":["event-loop-in-browser",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","segmentPath":["children","event-loop-in-browser","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L4",null,{"Component":"$5","searchParams":{},"params":{},"promises":["$@6","$@7"]}],[["$","link","0",{"rel":"stylesheet","href":"/fansheng/_next/static/css/816c72a330f138b3.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","_XfR8_Ou-vUYf5Fyd4Q_8",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+6:{}
+7:{}
+d:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"凡生"}],["$","meta","2",{"name":"description","content":"凡生的个人网站——前端工程师、极限运动员、闲来拍几张"}],["$","meta","3",{"name":"keywords","content":"凡生,前端工程师,极限运动员,摄影"}],["$","link","4",{"rel":"shortcut icon","href":"/fansheng/favicon.ico"}],["$","link","5",{"rel":"icon","href":"/fansheng/favicon.ico"}],["$","link","6",{"rel":"apple-touch-icon","href":"/fansheng/apple-touch-icon.png"}],["$","link","7",{"rel":"icon","href":"/fansheng/favicon.ico"}]]
+9:null
