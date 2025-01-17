@@ -35,8 +35,16 @@ export default function ProjectsPage() {
         <section className="project-card shadow-sm rounded-lg">
           <Link className="mt-4 block" href="/gaussian-noise-2d">
             <h2 className="title text-foreground">Gaussian Noise 2D Pattern</h2>
-            <img className="project-image" src={`${basePath}/assets/gaussian-noise-2d.jpg`} alt="three-attributes"/>
+            <img className="project-image" src={`${basePath}/assets/gaussian-noise-2d.jpg`} alt="gaussian-noise-2d"/>
             <p className="description text-foreground">高斯噪点函数生成的图案</p>
+          </Link>
+        </section>
+
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/voice-weave">
+            <h2 className="title text-foreground">Audio + Shader 声音频谱</h2>
+            <img className="project-image" src={`${basePath}/assets/voice-weave.jpg`} alt="three-attributes"/>
+            <p className="description text-foreground">h5 audio api + webgl 绘制声音曲线频谱</p>
           </Link>
         </section>
       </div>
