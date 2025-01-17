@@ -29,10 +29,12 @@ const vertexShaderSource = `
 const fragmentShaderSource = `
   precision mediump float;
   varying float vAmplitude;
-  uniform vec3 color;
+   uniform vec3 colorLow;
+  uniform vec3 colorHigh;
 
   void main() {
-    gl_FragColor = vec4(color * vAmplitude, 1.0);
+    vec3 color = mix(colorLow, colorHigh, vAmplitude);
+    gl_FragColor = vec4(color, 1.0);
   }
 `;
 
@@ -56,7 +58,7 @@ export default function VoiceWeave() {
     setIsRecording(prev => !prev);
   }, [isRecording, startRecording, stopRecording]);
 
-  
+
   const renderCallback = useCallback(() => {
     const gl = getGLContext();
     if (!gl || !isRecording) return;
@@ -67,6 +69,8 @@ export default function VoiceWeave() {
     const timeLocation = gl.getUniformLocation(program, 'time');
     const resolutionLocation = gl.getUniformLocation(program, 'resolution');
     const colorLocation = gl.getUniformLocation(program, 'color');
+    const colorLowLocation = gl.getUniformLocation(program, 'colorLow');
+    const colorHighLocation = gl.getUniformLocation(program, 'colorHigh');
     const amplitudesLocation = gl.getUniformLocation(program, 'amplitudes');
 
     const audioData = getAudioData();
@@ -80,7 +84,9 @@ export default function VoiceWeave() {
     const time = performance.now() / 1000;
     gl.uniform1f(timeLocation, time);
     gl.uniform2f(resolutionLocation, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.uniform3f(colorLocation, 0.3, 1.0, 0.8);
+    gl.uniform3f(colorLowLocation, 0.0, 0.0, 1.0); // Blue for low frequencies
+    gl.uniform3f(colorHighLocation, 1.0, 0.0, 0.0); // Red for high frequencies
+    gl.uniform1fv(amplitudesLocation, amplitudes);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -140,7 +146,7 @@ export default function VoiceWeave() {
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    const positions = new Float32Array(256); 
+    const positions = new Float32Array(256);
     for (let i = 0; i < 256; i++) positions[i] = i;
     gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 
