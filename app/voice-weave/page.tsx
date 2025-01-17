@@ -68,7 +68,6 @@ export default function VoiceWeave() {
 
     const timeLocation = gl.getUniformLocation(program, 'time');
     const resolutionLocation = gl.getUniformLocation(program, 'resolution');
-    const colorLocation = gl.getUniformLocation(program, 'color');
     const colorLowLocation = gl.getUniformLocation(program, 'colorLow');
     const colorHighLocation = gl.getUniformLocation(program, 'colorHigh');
     const amplitudesLocation = gl.getUniformLocation(program, 'amplitudes');
