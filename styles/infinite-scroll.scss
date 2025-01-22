@@ -45,3 +45,38 @@
     }
   }
 }
+
+.scroll-content__container {
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+  .virtual-item {
+    transition: opacity 0.2s;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+
+    &.loading {
+      opacity: 0.5;
+    }
+  }
+}
+
+// 添加滚动条样式
+.virtual-scroll-container {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+}

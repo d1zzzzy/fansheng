@@ -29,6 +29,11 @@ export default function VirtualScroll ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
 
+  // 添加新的状态来记录未渲染的区域
+  const [pendingRanges, setPendingRanges] = useState<{start: number, end: number}[]>([]);
+  const lastScrollTop = useRef(0);
+  const scrollingDirection = useRef<'up' | 'down'>('down');
+
   // 初始化位置数组和高度，使用数据中的预设高度
   useEffect(() => {
     if (!data.length) return;
@@ -88,18 +93,31 @@ export default function VirtualScroll ({
 
   const debouncedScroll = useCallback(
     debounce((scrollTop: number) => {
+      // 确定滚动方向
+      scrollingDirection.current = scrollTop > lastScrollTop.current ? 'down' : 'up';
+      lastScrollTop.current = scrollTop;
+
       const start = findStartIndex(scrollTop);
-      // 确保上下都有缓冲区
-      const visibleCount = Math.ceil(containerHeight / 50); // 估算可见区域内的元素数量
-      const end = Math.min(
-        data.length,
-        start + visibleCount + bufferSize * 2 // 下方添加缓冲区
-      );
+      const visibleCount = Math.ceil(containerHeight / 50);
+      const end = Math.min(data.length, start + visibleCount + bufferSize * 2);
+
+      // 检查是否有大范围跳跃
+      const gap = scrollingDirection.current === 'down'
+        ? start - visibleEnd
+        : visibleStart - end;
+
+      if (gap > bufferSize * 2) {
+        // 记录跳过的区域
+        setPendingRanges(prev => [...prev, {
+          start: scrollingDirection.current === 'down' ? visibleEnd : end,
+          end: scrollingDirection.current === 'down' ? start : visibleStart
+        }]);
+      }
 
       setVisibleStart(start);
       setVisibleEnd(end);
     }, 16),
-    [data.length, findStartIndex, containerHeight, bufferSize]
+    [data.length, findStartIndex, containerHeight, bufferSize, visibleStart, visibleEnd]
   );
 
   const handleScroll = useCallback(() => {
@@ -142,6 +160,53 @@ export default function VirtualScroll ({
     return () => clearTimeout(timeoutId);
   }, [visibleStart, visibleEnd, measureHeights]);
 
+  // 添加对未渲染区域的处理
+  useEffect(() => {
+    if (pendingRanges.length === 0) return;
+
+    const processPendingRanges = async () => {
+      const ranges = [...pendingRanges];
+      setPendingRanges([]); // 清空待处理队列
+
+      // 分批处理跳过的区域
+      for (const range of ranges) {
+        const batchSize = 10; // 每批处理的元素数量
+        for (let i = range.start; i < range.end; i += batchSize) {
+          const batchEnd = Math.min(i + batchSize, range.end);
+          // 临时渲染这些元素以获取它们的高度
+          const tempData = data.slice(i, batchEnd);
+
+          // 使用 requestAnimationFrame 避免阻塞主线程
+          await new Promise(resolve => {
+            requestAnimationFrame(() => {
+              tempData.forEach((item, index) => {
+                const actualIndex = i + index;
+                // 更新高度缓存
+                const element = document.createElement('div');
+                element.style.cssText = `
+                  position: absolute;
+                  visibility: hidden;
+                  height: ${item.height}px;
+                `;
+                document.body.appendChild(element);
+                const height = element.getBoundingClientRect().height;
+                document.body.removeChild(element);
+
+                heights.current[actualIndex] = height;
+              });
+              resolve(null);
+            });
+          });
+        }
+      }
+
+      // 更新位置信息
+      updatePositions();
+    };
+
+    processPendingRanges();
+  }, [pendingRanges, data, updatePositions]);
+
   const visibleData = data.slice(visibleStart, visibleEnd);
 
   return (
@@ -180,6 +245,22 @@ export default function VirtualScroll ({
             {item.text}
           </div>
         ))}
+        {/* 添加加载提示 */}
+        {pendingRanges.length > 0 && (
+          <div
+            style={{
+              position: 'fixed',
+              right: '20px',
+              top: '20px',
+              padding: '10px',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              color: '#fff',
+              borderRadius: '4px',
+            }}
+          >
+            正在加载跳过的内容...
+          </div>
+        )}
       </div>
     </div>
   );
