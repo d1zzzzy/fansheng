@@ -1,0 +1,47 @@
+.page {
+  --item-gap: 20px;
+  --container-width: 300px;
+  --container-height: 800px;
+  --scroll-padding-vertical: 10px;
+  --scroll-padding-horizontal: 12px;
+
+  .scroll {
+    &-content {
+      &__container {
+        width: var(--container-width);
+        height: var(--container-height);
+        border: 1px solid var(--sea-green);
+      }
+
+      &__inner {
+        position: relative;
+        padding: var(--scroll-padding-vertical) var(--scroll-padding-horizontal);
+      }
+    }
+
+    &-item {
+      margin-bottom: var(--item-gap);
+      box-shadow: 0 0 2px 2px var(--wine);
+
+      &.placeholder {
+        position: absolute;
+        left: var(--scroll-padding-horizontal);
+        margin-bottom: 0;
+        background-color: red;
+        box-shadow: 0 0 4px 4px var(--wine);
+
+        &-head {
+          top: var(--scroll-padding-vertical);
+        }
+
+        &-tail {
+          bottom: var(--scroll-padding-vertical);
+        }
+      }
+
+      &:nth-last-child(2) {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

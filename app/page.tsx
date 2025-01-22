@@ -47,6 +47,14 @@ export default function ProjectsPage() {
             <p className="description text-foreground">h5 audio api + webgl 绘制声音曲线频谱</p>
           </Link>
         </section>
+
+        <section className="project-card shadow-sm rounded-lg">
+          <Link className="mt-4 block" href="/infinite-scroll">
+            <h2 className="title text-foreground">虚拟列表</h2>
+            <img className="project-image" src={`${basePath}/assets/virtual-infinite-list.jpg`} alt="virtual list"/>
+            <p className="description text-foreground">无限滚动虚拟列表</p>
+          </Link>
+        </section>
       </div>
     </div>
   );
