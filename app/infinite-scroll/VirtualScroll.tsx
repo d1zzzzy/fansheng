@@ -213,6 +213,7 @@ export default function VirtualScroll ({
     <div
       ref={containerRef}
       onScroll={handleScroll}
+      className="virtual-scroll-container"
       style={{
         height: `${containerHeight}px`,
         overflowY: 'auto',
@@ -224,6 +225,7 @@ export default function VirtualScroll ({
         style={{
           height: `${totalHeight}px`,
           position: 'relative',
+          willChange: 'transform',
         }}
       >
         {visibleData.map((item, index) => (
@@ -233,11 +235,11 @@ export default function VirtualScroll ({
             data-index={visibleStart + index}
             style={{
               position: 'absolute',
-              top: `${positions.current[visibleStart + index]}px`,
               width: '100%',
-              border: '1px solid #ccc',
-              boxSizing: 'border-box',
               height: `${item.height}px`,
+              transform: `translateY(${positions.current[visibleStart + index]}px)`,
+              willChange: 'transform',
+              boxSizing: 'border-box',
               padding: '8px',
               backgroundColor: '#fff',
             }}
@@ -245,7 +247,6 @@ export default function VirtualScroll ({
             {item.text}
           </div>
         ))}
-        {/* 添加加载提示 */}
         {pendingRanges.length > 0 && (
           <div
             style={{
@@ -256,6 +257,7 @@ export default function VirtualScroll ({
               backgroundColor: 'rgba(0,0,0,0.5)',
               color: '#fff',
               borderRadius: '4px',
+              transform: 'translateZ(0)',
             }}
           >
             正在加载跳过的内容...
