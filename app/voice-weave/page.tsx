@@ -39,20 +39,20 @@ const fragmentShaderSource = `
 `;
 
 export default function VoiceWeave() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const { getAudioData, startRecording, stopRecording } = useAudioAnalyzer();
-    const { getGLContext } = useWebGL(canvasRef);
-    const [isRecording, setIsRecording] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { getAudioData, startRecording, stopRecording } = useAudioAnalyzer();
+  const { getGLContext } = useWebGL(canvasRef);
+  const [ isRecording, setIsRecording ] = useState(false);
 
-    const RecordIcon = isRecording
-        ? <GraphicEqRoundedIcon />
-        : <KeyboardVoiceRoundedIcon />;
+  const RecordIcon = isRecording
+    ? <GraphicEqRoundedIcon />
+    : <KeyboardVoiceRoundedIcon />;
 
   const toggleRecording = useCallback(async () => {
     if (isRecording) {
-        await stopRecording();
+      await stopRecording();
     } else {
-        await startRecording();
+      await startRecording();
     }
 
     setIsRecording(prev => !prev);
@@ -160,13 +160,13 @@ export default function VoiceWeave() {
     if (isRecording) requestAnimationFrame(renderCallback);
   }, [isRecording, renderCallback]);
 
-    return (
-        <article className="voice-weave w-full h-full">
-            <canvas ref={canvasRef} id="canvas"></canvas>
+  return (
+    <article className="voice-weave w-full h-full">
+      <canvas ref={canvasRef} id="canvas"></canvas>
 
-            <IconButton className="pointer record-btn" color='primary' onClick={toggleRecording}>
-                { RecordIcon }
-            </IconButton>
-        </article>
-    )
+      <IconButton className="pointer record-btn" color='primary' onClick={toggleRecording}>
+        { RecordIcon }
+      </IconButton>
+    </article>
+  )
 }
