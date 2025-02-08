@@ -9,8 +9,8 @@ const randColor = () => `hsl(${randInt(0, 360)}, 100%, 50%)`;
 
 export default function NewYearFireWork() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const fireworks: any[] = [];
-  const explosions: any[] = [];
+  const fireworks: unknown[] = [];
+  const explosions: unknown[] = [];
   let animationFrameId: number;
   let lastLaunchTime = 0; // 记录上次发射的时间
   const launchInterval = 500; // 发射间隔，单位为毫秒
@@ -156,7 +156,7 @@ export default function NewYearFireWork() {
           ctx.beginPath();
           if (this.trail.length > 1) {
             ctx.moveTo(this.trail[0].x, this.trail[0].y);
-            for (let point of this.trail) {
+            for (const point of this.trail) {
               ctx.lineTo(point.x, point.y);
             }
           } else {
@@ -193,7 +193,7 @@ export default function NewYearFireWork() {
         }
 
         for (let i = fireworks.length - 1; i >= 0; i--) {
-          const firework = fireworks[i];
+          const firework = fireworks[i] as Firework;
           if (!firework.update()) {
             fireworks.splice(i, 1);
           } else {
@@ -202,7 +202,7 @@ export default function NewYearFireWork() {
         }
 
         for (let i = explosions.length - 1; i >= 0; i--) {
-          const particle = explosions[i];
+          const particle = explosions[i] as Particle;
           particle.update();
           if (particle.isAlive()) {
             particle.draw(ctx);
